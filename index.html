@@ -123,7 +123,7 @@ details summary{color:var(--gd2)}
 .kpis{display:flex;gap:10px;flex-wrap:wrap}.kpis div{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:8px 14px;text-align:center;color:var(--mut);font-size:12px;min-width:70px}.kpis b{display:block;font:700 22px 'Chakra Petch',sans-serif;color:var(--tx)}
 .tools .pchip{display:flex;align-items:center;background:var(--panel);color:var(--tx);border:1px solid var(--line2);border-radius:999px;padding:4px 14px 4px 6px;cursor:pointer;font:inherit;font-size:14px}
 .tools .pchip[aria-pressed=true]{border-color:var(--gd);background:rgba(0,208,240,.1);color:var(--gd2)}
-.ro #fev,.ro [data-evdel],.ro .pecol{display:none}
+.ro #fev,.ro [data-evdel],.ro .pecol,.ro [data-pesave]{display:none}
 </style>
 </head>
 <body>
@@ -290,7 +290,7 @@ var yes=P.filter(function(p,i){return a[i]===1}).length;
 var inp=function(i,f,v,ex){return '<input data-i="'+i+'" data-f="'+f+'" value="'+esc(v)+'" aria-label="'+f+'" '+(ex||"")+'>'};
 $("#s-nomina").innerHTML='<h2>Nómina</h2><div class="card"><label>Sesión<select id="se">'+E.slice().sort(cmp).map(function(e){return '<option value="'+e.id+'"'+(e.id===sel?' selected':'')+'>'+esc(e.t+' · '+e.d+' '+e.h)+'</option>'}).join("")+'</select></label>'+
 (ev?'<p><b>'+yes+'</b> de '+P.length+' confirmados</p><div class="scroll"><table><tr><th>Jugador</th><th>Rol</th><th>Asistencia</th></tr>'+P.map(function(p,i){return '<tr><td><span class="avi">'+av(p,30)+'</span>'+esc(p.n)+'</td><td>'+esc(p.r)+'</td><td>'+[[1,"Entrena"],[0,"No entrena"],[null,"Pendiente"]].map(function(o){return '<button class="chipb" data-i="'+i+'" data-v="'+o[0]+'" aria-pressed="'+(a[i]==null?o[0]==null:a[i]===o[0])+'"'+(canAtt()?"":" disabled")+'>'+o[1]+'</button>'}).join("")+'</td></tr>'}).join("")+'</table></div><label style="margin-top:12px">Aviso para el grupo<textarea id="mg" rows="4" readonly>'+esc(msg(ev))+'</textarea></label><p><button class="btn" id="cp">Copiar aviso</button> <span id="cpm" class="sub"></span></p>':'<p class="sub">Aún no hay sesiones. Agenda la primera aquí abajo.</p>')+
-'<h3 style="font-size:24px;margin:16px 0 6px">Agendar sesión</h3>'+QF()+'</div><h2 style="margin-top:22px">Asistencia a entrenamientos</h2>'+attHtml()+'<h2 style="margin-top:22px">Datos de jugadores</h2><div class="card scroll"><table><tr><th>Jugador</th><th>Rango</th><th>K/D</th><th>ACS</th><th>Tracker</th><th class="pecol">Correo</th><th>Foto</th><th></th></tr>'+P.map(function(p,i){return '<tr><td>'+esc(p.n)+'</td><td>'+inp(i,"rk",p.rk)+'</td><td>'+inp(i,"kd",p.kd,'type="number" step="0.01" style="width:80px"')+'</td><td>'+inp(i,"acs",p.acs,'type="number" style="width:80px"')+'</td><td>'+(p.tr?'<a href="'+esc(p.tr)+'" target="_blank" rel="noopener" style="color:var(--gd)">Abrir tracker</a>':'')+inp(i,"tr",p.tr,'placeholder="Pega el link"')+'</td><td class="pecol"><input data-pe="'+i+'" type="email" placeholder="correo@gmail.com" style="min-width:170px" value="'+esc(PE[p.id]||"")+'"></td><td><label class="btn alt pfl" style="cursor:pointer;display:inline-block">Subir<input type="file" accept="image/*" data-pf="'+i+'" hidden></label></td><td><button class="btn alt" data-prm="'+i+'">Quitar</button></td></tr>'}).join("")+'</table></div><h2 style="margin-top:22px">Actualizar desde Tracker</h2>'+trkHtml()+'<h2 style="margin-top:22px">Agregar jugador</h2><div class="card"><form id="fp"><label>Nombre<input name="n" required></label><label>Rol<select name="r"><option>Duelista</option><option>Iniciador</option><option>Controlador</option><option>Centinela</option><option>Flex</option></select></label><label>Agentes (separados por coma)<input name="a"></label><label>Rango<input name="rk"></label><button class="btn">Agregar</button></form></div>'}
+'<h3 style="font-size:24px;margin:16px 0 6px">Agendar sesión</h3>'+QF()+'</div><h2 style="margin-top:22px">Asistencia a entrenamientos</h2>'+attHtml()+'<h2 style="margin-top:22px">Datos de jugadores</h2><div class="card scroll"><table><tr><th>Jugador</th><th>Rango</th><th>K/D</th><th>ACS</th><th>Tracker</th><th class="pecol">Correo</th><th>Foto</th><th></th></tr>'+P.map(function(p,i){return '<tr><td>'+esc(p.n)+'</td><td>'+inp(i,"rk",p.rk)+'</td><td>'+inp(i,"kd",p.kd,'type="number" step="0.01" style="width:80px"')+'</td><td>'+inp(i,"acs",p.acs,'type="number" style="width:80px"')+'</td><td>'+(p.tr?'<a href="'+esc(p.tr)+'" target="_blank" rel="noopener" style="color:var(--gd)">Abrir tracker</a>':'')+inp(i,"tr",p.tr,'placeholder="Pega el link"')+'</td><td class="pecol"><input data-pe="'+i+'" type="email" placeholder="correo@gmail.com" style="min-width:170px" value="'+esc(PE[p.id]||"")+'"> <button class="btn alt" data-pesave="'+i+'" style="margin-top:4px">Guardar</button></td><td><label class="btn alt pfl" style="cursor:pointer;display:inline-block">Subir<input type="file" accept="image/*" data-pf="'+i+'" hidden></label></td><td><button class="btn alt" data-prm="'+i+'">Quitar</button></td></tr>'}).join("")+'</table></div><h2 style="margin-top:22px">Actualizar desde Tracker</h2>'+trkHtml()+'<h2 style="margin-top:22px">Agregar jugador</h2><div class="card"><form id="fp"><label>Nombre<input name="n" required></label><label>Rol<select name="r"><option>Duelista</option><option>Iniciador</option><option>Controlador</option><option>Centinela</option><option>Flex</option></select></label><label>Agentes (separados por coma)<input name="a"></label><label>Rango<input name="rk"></label><button class="btn">Agregar</button></form></div>'}
 $("#s-nomina").onclick=function(e){var b=e.target.closest("button");if(!b)return;
 if(b.dataset.v!=null){var a=A[sel]=A[sel]||{},i=+b.dataset.i;if(b.dataset.v==="null")delete a[i];else a[i]=+b.dataset.v;saveAtt(i);rNom();return}
 if(b.id==="cp"){var t=$("#mg");t.select();try{navigator.clipboard.writeText(t.value);$("#cpm").textContent="Aviso copiado"}catch(x){$("#cpm").textContent="Copia el texto seleccionado"}}};
@@ -385,6 +385,7 @@ if(window.FB&&FB.delAtt)FB.delAtt(n-1).catch(er);
 drawAll();note(p.n+" fue quitado del equipo.")}
 var _nc=$("#s-nomina").onclick;
 $("#s-nomina").onclick=function(e){var b=e.target.closest("button");
+if(b&&b.dataset.pesave!=null){var pin=document.querySelector('input[data-pe="'+b.dataset.pesave+'"]');setEmail(+b.dataset.pesave,pin?pin.value:"");return}
 if(b&&b.dataset.prm!=null){removePlayer(+b.dataset.prm);return}
 if(b&&b.id==="tkr"){TK.pi=+$("#tkp").value;tkShow(tkParse($("#tkt").value));return}
 if(b&&b.id==="tka"){if(!canEdit()){note("Solo los editores pueden guardar datos.");return}var p=P[TK.pi],g=function(k){return $("#tk_"+k).value.trim()},n=function(k){var v=parseFloat(g(k).replace(",","."));return isNaN(v)?null:v};
@@ -489,10 +490,11 @@ v=String(v).trim().toLowerCase();var old=PE[p.id]||"";
 if(v&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){note("Ese correo no parece válido.");rNom();return}
 if(v===old)return;
 if(v&&Object.keys(PE).some(function(k){return PE[k]===v&&k!==p.id})){note("Ese correo ya está asignado a otro jugador.");rNom();return}
-if(old)window.FB.delPl(old).catch(er);
-if(v){window.FB.setPl(v,{pid:p.id,n:p.n}).catch(er);PE[p.id]=v}else delete PE[p.id];
-evOf(p.id).forEach(function(e){e.pe=v;window.FB.saveEv(e.id,evDoc(e),null).catch(er)});
-rNom();rPerfil();note(v?"Correo guardado.":"Correo quitado.")}
+var undo=function(e){er(e);if(old)PE[p.id]=old;else delete PE[p.id];rNom();rPerfil()};
+if(v)PE[p.id]=v;else delete PE[p.id];
+var ops=[];if(old&&old!==v)ops.push(window.FB.delPl(old));if(v)ops.push(window.FB.setPl(v,{pid:p.id,n:p.n}));
+Promise.all(ops).then(function(){evOf(p.id).forEach(function(e){e.pe=v;window.FB.saveEv(e.id,evDoc(e),null).catch(er)});rNom();rPerfil();note(v?"Correo guardado en Firebase. "+p.n+" ya puede entrar con esa cuenta.":"Correo quitado.")}).catch(undo);
+rNom()}
 var _nch=$("#s-nomina").onchange;
 $("#s-nomina").onchange=function(e){var t=e.target;if(t.dataset&&t.dataset.pe!=null){setEmail(+t.dataset.pe,t.value);return}if(_nch)_nch.call(this,e)};
 var db=null,CE=true,PR={};
@@ -503,7 +505,7 @@ var SEED={"P": [{"n": "Ｖธyx", "r": "Por definir", "a": ["Chamber", "Omen", "
 (function(){var d=SEED;P=d.P||[];M=d.M||[];G=d.G||[];E=d.E||[];eid=d.eid||10;PR=d.PR||{};R=d.R||[];TC=d.TC||[];A=d.A||{}})();
 function canEdit(){return !!(ME&&ME.editor)}
 function canAtt(){return !!(ME&&(ME.editor||ME.player))}
-function er(e){note("No se pudo guardar ("+(e&&(e.code||e.message)||"error")+")")}
+function er(e){var c=String(e&&(e.code||e.message)||"error");note(c.indexOf("permission-denied")>=0?"Firebase rechazó el cambio (permission-denied). Revisa que publicaste las reglas nuevas y que entraste con un correo de editor.":"No se pudo guardar ("+c+")")}
 function save(){if(!canEdit()){note("Inicia sesión como editor para guardar cambios.");return}
 ensureIds();window.FB.saveMain({P:P,M:M,G:G,E:E,eid:eid,PR:PR,R:R,TC:TC}).catch(er)}
 function saveAtt(i){if(!canAtt()){note("Inicia sesión con tu correo de jugador para marcar asistencia.");return}
